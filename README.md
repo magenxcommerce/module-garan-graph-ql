@@ -97,9 +97,12 @@ it the four attributes keep backend models pointing at deleted classes, and ever
 ## Tests
 
 ```bash
-composer install   # needs magento/* packages (repo.magento.com or a Mage-OS mirror)
+composer install   # magento/* come from the public Mage-OS mirror declared in composer.json
 vendor/bin/phpunit
 ```
+
+The `repositories` entry only affects installs where this package is the root (local runs and CI, which has
+no repo.magento.com key pair). Composer ignores it when the module is installed into a store.
 
 To run the suite inside an existing Magento installation, set `GARAN_AUTOLOAD` to that installation's
 `vendor/autoload.php`.
