@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magenx. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <magenx_garan>
+            <general>
+                <enabled>0</enabled>
+                <language/>
+                <excluded_product_types>virtual,downloadable,giftcard</excluded_product_types>
+            </general>
+            <garan>
+                <enabled>0</enabled>
+                <brand_source>garan_attribute</brand_source>
+                <brand_attribute/>
+                <brand_value/>
+                <model_source>garan_attribute</model_source>
+                <terms_url/>
+            </garan>
+            <email>
+                <notice>no</notice>
+                <garan>no</garan>
+                <attach_terms>0</attach_terms>
+                <terms_file/>
+                <terms_filename>guarantee-terms.pdf</terms_filename>
+            </email>
+        </magenx_garan>
+    </default>
+</config>

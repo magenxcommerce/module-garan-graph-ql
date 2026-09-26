@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         bootstrap="Test/bootstrap.php"
+         colors="true"
+         columns="max"
+         cacheDirectory=".phpunit.cache"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         failOnWarning="true"
+         failOnNotice="true">
+    <!--
+        failOnDeprecation is deliberately NOT set. Magento's own code triggers PHP deprecations from inside
+        vendor/ (for example a non-canonical cast in Magento\Catalog\Model\ResourceModel\Product\Collection),
+        and turning them into failures would paint the build red for third-party debt this module cannot fix.
+        Deprecations raised by this module's code should be fixed here instead.
+    -->
+    <testsuites>
+        <testsuite name="unit">
+            <directory>Test/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">Api</directory>
+            <directory suffix=".php">Model</directory>
+            <directory suffix=".php">Observer</directory>
+            <directory suffix=".php">Plugin</directory>
+            <directory suffix=".php">Setup</directory>
+        </include>
+    </source>
+    <php>
+        <ini name="memory_limit" value="-1"/>
+        <ini name="date.timezone" value="UTC"/>
+    </php>
+</phpunit>

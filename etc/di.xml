@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magenx. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magenx\GaranGraphQl\Api\GaranLabelResolverInterface"
+                type="Magenx\GaranGraphQl\Model\Garan\Resolver"/>
+
+    <!-- GARAN snapshot on the order item at order placement -->
+    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        <plugin name="magenx_garan_snapshot"
+                type="Magenx\GaranGraphQl\Plugin\Quote\ToOrderItemPlugin"/>
+    </type>
+
+    <!-- Notice and GARAN labels in the new order email -->
+    <type name="Magento\Sales\Block\Order\Email\Items">
+        <plugin name="magenx_garan_email_items"
+                type="Magenx\GaranGraphQl\Plugin\Sales\EmailItemsPlugin"/>
+    </type>
+
+    <!--
+        Attaches the files registered for the order confirmation email.
+        sortOrder 100 keeps this after every other afterGetTransport listener: "after" plugins run in ascending
+        sortOrder (Magento\Framework\Interception\PluginList\PluginList::_sort treats a missing sortOrder as
+        PHP_INT_MIN), and other extensions that attach files register without a sortOrder and replace the whole
+        message body, which would drop ours.
+    -->
+    <type name="Magento\Framework\Mail\Template\TransportBuilder">
+        <plugin name="magenx_garan_attach_pending_files"
+                type="Magenx\GaranGraphQl\Plugin\Mail\AttachPendingFiles"
+                sortOrder="100"/>
+    </type>
+</config>

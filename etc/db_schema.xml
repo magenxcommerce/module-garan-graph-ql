@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magenx. All rights reserved.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="sales_order_item" resource="sales" engine="innodb">
+        <column xsi:type="text" name="magenx_garan_label" nullable="true" comment="EU GARAN label snapshot (JSON)"/>
+    </table>
+</schema>

@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magenx. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="magenx" translate="label" sortOrder="400">
+            <label>Magenx</label>
+        </tab>
+        <section id="magenx_garan" translate="label" sortOrder="60"
+                 showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>EU Guarantee Notice &amp; GARAN Label</label>
+            <tab>magenx</tab>
+            <resource>Magenx_GaranGraphQl::config</resource>
+            <group id="general" translate="label comment" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Legal Guarantee Notice</label>
+                <comment><![CDATA[EU harmonised notice on the legal guarantee of conformity and EU GARAN label (Implementing Regulation (EU) 2025/1960, applicable from 27 September 2026). Where they appear is decided by the storefront. This module does not constitute legal advice.]]></comment>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Kill switch: "No" makes the garanNotice query and every GARAN field return null and removes the email additions for this scope.</comment>
+                </field>
+                <field id="language" translate="label comment" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Notice Language</label>
+                    <source_model>Magenx\GaranGraphQl\Model\Source\Language</source_model>
+                    <comment>Selects which of the 24 official notice versions and which Your Europe link are served. Empty follows the store locale, then English.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="excluded_product_types" translate="label comment" type="multiselect" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Product Types Without Legal Guarantee</label>
+                    <source_model>Magenx\GaranGraphQl\Model\Source\ProductType</source_model>
+                    <can_be_empty>1</can_be_empty>
+                    <comment>Non-goods such as gift cards or downloads: they never get a GARAN label, and Cart.garan_notice_required and the email notice ignore them.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="garan" translate="label comment" sortOrder="20"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>EU GARAN Label</label>
+                <comment><![CDATA[Only for products whose producer offers a commercial guarantee of durability free of charge, for the entire good and for more than two years. Maintain the duration on the product (group "EU GARAN Guarantee"); brand, model identifier and terms URL can come from the settings below. A variant without its own values inherits them from its configurable parent.]]></comment>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable GARAN Label</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Needs the notice to be enabled too. "No" makes garan_label / garan_labels return null and stops the order item snapshot.</comment>
+                </field>
+                <field id="brand_source" translate="label comment" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand Comes From</label>
+                    <source_model>Magenx\GaranGraphQl\Model\Source\BrandSource</source_model>
+                    <comment><![CDATA[A brand maintained on the product always wins. Brand and model identifier share one line on the label: a value that is too long is rejected, not shrunk, and the product then shows <strong>no label at all</strong>.]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="brand_attribute" translate="label comment" type="select" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand Product Attribute</label>
+                    <source_model>Magenx\GaranGraphQl\Model\Source\ProductTextAttribute</source_model>
+                    <comment>Read for products without their own GARAN brand; select attributes resolve to their option label.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                        <field id="brand_source">product_attribute</field>
+                    </depends>
+                </field>
+                <field id="brand_value" translate="label comment" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand</label>
+                    <comment>Printed on the label of every product without its own GARAN brand.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                        <field id="brand_source">config_value</field>
+                    </depends>
+                </field>
+                <field id="model_source" translate="label comment" type="select" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Model Identifier Comes From</label>
+                    <source_model>Magenx\GaranGraphQl\Model\Source\ModelIdentifierSource</source_model>
+                    <comment><![CDATA[A model identifier maintained on the product always wins. <strong>Careful with "Product name":</strong> most names are too long for the label line shared with the brand, and a value that does not fit means <strong>no label at all</strong>.]]></comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="terms_url" translate="label comment" type="text" sortOrder="60"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Guarantee Terms URL</label>
+                    <validate>validate-url</validate>
+                    <comment>Used for every product without its own URL. Full http:// or https:// address in the store view language; without any URL no label is served.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="email" translate="label comment" sortOrder="30"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Order Confirmation Email</label>
+                <comment>Magento still sends the order confirmation in a headless setup, so the notice, the labels and the guarantee terms travel with it.</comment>
+                <field id="notice" translate="label comment" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Legal Guarantee Notice</label>
+                    <source_model>Magenx\GaranGraphQl\Model\Source\EmailMode</source_model>
+                    <comment>"Inline" puts the notice graphic below the items; "As a file attachment" sends it as a PNG instead, readable in clients that block remote images.</comment>
+                </field>
+                <field id="garan" translate="label comment" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>GARAN Labels</label>
+                    <source_model>Magenx\GaranGraphQl\Model\Source\EmailMode</source_model>
+                    <comment>Labels come from the snapshot taken at order placement. "As a file attachment" sends one PNG per labelled item, named after its SKU.</comment>
+                </field>
+                <field id="attach_terms" translate="label comment" type="select" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Attach Guarantee Terms</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[The guarantee statement must reach the consumer on a durable medium at the latest at delivery (Art. 17(2) Directive (EU) 2019/771); a link to a website is not sufficient (CJEU C-49/11). Attached only to orders with at least one GARAN-labelled item.]]></comment>
+                </field>
+                <field id="terms_file" translate="label comment" type="file" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Guarantee Terms File (PDF)</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\File</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">magenx_garan/terms</upload_dir>
+                    <base_url type="media" scope_info="1">magenx_garan/terms</base_url>
+                    <comment>One document per store view. It must name the goods it covers, e.g. "applies to all products of brand X carrying the GARAN label".</comment>
+                    <depends>
+                        <field id="attach_terms">1</field>
+                    </depends>
+                </field>
+                <field id="terms_filename" translate="label comment" type="text" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Attachment File Name</label>
+                    <comment>Name the customer sees in the email. Leave empty for the uploaded file name.</comment>
+                    <depends>
+                        <field id="attach_terms">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

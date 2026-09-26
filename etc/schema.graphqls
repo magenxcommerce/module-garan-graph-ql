@@ -1,0 +1,55 @@
+# Copyright © Magenx. All rights reserved.
+
+type Query {
+    garanNotice: GaranNotice
+        @resolver(class: "Magenx\\GaranGraphQl\\Model\\Resolver\\GaranNotice")
+        @doc(description: "The official EU harmonised notice on the legal guarantee of conformity (Implementing Regulation (EU) 2025/1960, Annex I) in the store's notice language. Null when the notice is disabled for the store.")
+}
+
+type GaranNotice @doc(description: "The harmonised legal guarantee notice. The artwork must be shown unmodified; only its size and language may change.") {
+    language: String! @doc(description: "ISO 639-1 code of the official language version served, e.g. `de`.")
+    svg_url: String! @doc(description: "Absolute URL of the official notice SVG. Render it at least 420 CSS px wide so its QR code stays at least 2 x 2 cm.")
+    png_url: String! @doc(description: "Absolute URL of the official notice PNG (1654 x 2339 px), for contexts that cannot show SVG.")
+    link_url: String! @doc(description: "Your Europe link target, identical to the QR code destination. Show it as a clickable link next to the notice.")
+    link_label: String! @doc(description: "Link text as printed on the notice, e.g. `europa.eu/youreurope/garantien`.")
+    alt_text: String! @doc(description: "Alternative text of the notice image, translated to the store locale.")
+    excluded_product_types: [String!]! @doc(description: "Product type ids that carry no legal guarantee notice (gift cards, downloads).")
+}
+
+type GaranLabel @doc(description: "The EU GARAN label of a producer's free commercial guarantee of durability over more than two years (Implementing Regulation (EU) 2025/1960, Annex II).") {
+    sku: String! @doc(description: "SKU of the simple product the label belongs to.")
+    product_name: String! @doc(description: "Name of the simple product the label belongs to; differs from the line name for bundle children and variants.")
+    brand: String! @doc(description: "Brand printed on the label.")
+    model_identifier: String! @doc(description: "Model identifier printed on the label.")
+    duration_years: Float! @doc(description: "Guarantee duration in years: whole or half years, more than 2.")
+    formatted_duration: String! @doc(description: "Duration as printed on the label, e.g. `5` or `4,5`.")
+    terms_url: String! @doc(description: "The producer's guarantee terms. Link it next to the label.")
+    image_url: String @doc(description: "Absolute URL of the full label PNG (539 x 567 px), rendered onto the official artwork and cached. Null when it cannot be rendered; show alt_text then.")
+    nested_image_url: String @doc(description: "Absolute URL of the compact nested-display label PNG (737 x 113 px), meant as the trigger that opens the full label. Null when it cannot be rendered.")
+    alt_text: String! @doc(description: "Accessible text carrying all label information, translated to the store locale.")
+    info_url: String! @doc(description: "The Commission's information page on the GARAN label. Link it next to the label.")
+}
+
+interface ProductInterface {
+    garan_label: GaranLabel
+        @resolver(class: "Magenx\\GaranGraphQl\\Model\\Resolver\\Product\\GaranLabel")
+        @doc(description: "The EU GARAN label of this product. A variant without own values inherits its configurable parent's. Null when the product has no qualifying producer guarantee or the label is disabled.")
+}
+
+interface CartItemInterface {
+    garan_labels: [GaranLabel!]
+        @resolver(class: "Magenx\\GaranGraphQl\\Model\\Resolver\\CartItem\\GaranLabels")
+        @doc(description: "GARAN labels of the simple products behind this line: the item itself, the selected variant, or every bundle child. Empty when none qualifies; null when the label is disabled.")
+}
+
+interface OrderItemInterface {
+    garan_labels: [GaranLabel!]
+        @resolver(class: "Magenx\\GaranGraphQl\\Model\\Resolver\\OrderItem\\GaranLabels")
+        @doc(description: "GARAN labels frozen on this item when the order was placed. Empty when none applied; null when the module is disabled.")
+}
+
+type Cart {
+    garan_notice_required: Boolean
+        @resolver(class: "Magenx\\GaranGraphQl\\Model\\Resolver\\Cart\\GaranNoticeRequired")
+        @doc(description: "True when the legal guarantee notice belongs next to this cart: the notice is enabled and at least one line is not an excluded product type.")
+}
