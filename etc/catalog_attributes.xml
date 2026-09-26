@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd">
+    <group name="quote_item">
+        <attribute name="garan_brand"/>
+        <attribute name="garan_model_identifier"/>
+        <attribute name="garan_duration_years"/>
+        <attribute name="garan_terms_url"/>
+    </group>
+</config>

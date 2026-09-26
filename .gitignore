@@ -1,0 +1,7 @@
+/.omc/
+/.idea/
+/vendor/
+/composer.lock
+.DS_Store
+/.lint/
+/.phpunit.cache/

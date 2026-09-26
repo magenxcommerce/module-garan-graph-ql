@@ -1,0 +1,7 @@
+{
+    "sales_order_item": {
+        "column": {
+            "magenx_garan_label": true
+        }
+    }
+}
