@@ -29,7 +29,7 @@ The full contract is in [`etc/schema.graphqls`](etc/schema.graphqls).
 
 | Field | Resolver | Notes |
 |---|---|---|
-| `Query.garanNotice: GaranNotice` | plain | Official notice SVG/PNG URL of the configured language, Your Europe link, alt text. Null when disabled. |
+| `Query.garanNotice: GaranNotice` | plain | Official notice SVG/PNG media URL (`media/garan/notice/`) of the configured language, Your Europe link, alt text. Null when disabled. |
 | `ProductInterface.garan_label: GaranLabel` | **batch** | One configurable-parent query and one query per EAV table for the whole branch. |
 | `CartItemInterface.garan_labels: [GaranLabel!]` | **batch** | Covers the item, the selected variant, or every bundle child. |
 | `OrderItemInterface.garan_labels: [GaranLabel!]` | plain | Read from the snapshot column loaded with the item, so it costs no query. |
@@ -109,9 +109,28 @@ To run the suite inside an existing Magento installation, set `GARAN_AUTOLOAD` t
 
 ## Assets
 
-The official artwork (`view/base/web/notice`, `view/base/web/garan`) is byte-identical to the Commission's files
-and must never be altered. Inter 4.1 is bundled under the OFL for server-side measuring and rendering only. See
-[`view/base/web/ASSETS.md`](view/base/web/ASSETS.md).
+The artwork and fonts are **not shipped with the module**. Deploy them once per environment to `pub/media/garan/`:
+
+```
+pub/media/garan/
+├── garan/    label.svg, label.png, nested.svg, nested.png, label-blank@4x.png, nested-blank@4x.png
+├── fonts/    LICENSE-Inter.txt, ttf/Inter-{Regular,SemiBold,ExtraBold}.ttf
+└── notice/   {lang}.svg and {lang}.png for the 24 EU languages
+```
+
+They are served from the store media URL like any other Magento media, e.g.
+`https://shop.example/media/garan/notice/de.svg`, so static content deploys never touch them. The GARAN blanks and
+the Inter TTFs are also read server-side for the email PNGs; a missing file makes the affected URL or attachment
+`null` and logs an error instead of breaking the request.
+
+The official artwork is byte-identical to the Commission's files and must never be altered. Verify a deploy with
+[`docs/notice.CHECKSUMS`](docs/notice.CHECKSUMS):
+
+```bash
+cd pub/media/garan/notice && sha256sum -c /path/to/module/docs/notice.CHECKSUMS
+```
+
+Sources, licences and the one generated file (`notice/en.png`) are documented in [`docs/ASSETS.md`](docs/ASSETS.md).
 
 ## Licence
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Magenx\GaranGraphQl\Model\Language;
 
 use InvalidArgumentException;
+use Magenx\GaranGraphQl\Model\Asset\MediaAssets;
 
 /**
  * Official EU language versions of the harmonised notice and their Your Europe link targets
@@ -15,7 +16,6 @@ class LanguageRegistry
     public const FALLBACK_LANGUAGE = 'en';
     public const YOUR_EUROPE_BASE = 'europa.eu/youreurope/';
     public const GARAN_INFO_URL = 'https://europa.eu/youreurope/commercial-guarantee-durability/index.htm';
-    private const NOTICE_ASSET_PREFIX = 'Magenx_GaranGraphQl::notice/';
     private const NOTICE_EXTENSIONS = ['svg', 'png'];
 
     /**
@@ -85,15 +85,15 @@ class LanguageRegistry
     }
 
     /**
-     * Asset id for \Magento\Framework\View\Asset\Repository, e.g. "Magenx_GaranGraphQl::notice/de.svg".
+     * Notice file relative to the GARAN media assets, e.g. "notice/de.svg".
      */
-    public function getNoticeAssetId(string $code, string $extension): string
+    public function getNoticeFile(string $code, string $extension): string
     {
         if (!in_array($extension, self::NOTICE_EXTENSIONS, true)) {
             throw new InvalidArgumentException(sprintf('Unsupported notice file extension "%s".', $extension));
         }
 
-        return self::NOTICE_ASSET_PREFIX . $this->assertSupported($code) . '.' . $extension;
+        return MediaAssets::NOTICE_DIRECTORY . '/' . $this->assertSupported($code) . '.' . $extension;
     }
 
     /**

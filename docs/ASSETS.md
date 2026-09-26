@@ -1,5 +1,8 @@
 # Warranty label assets
 
+Deployed separately to `pub/media/garan/{garan,fonts,notice}` and served from the media URL;
+the module itself ships none of these files. Paths below are relative to `pub/media/garan/`.
+
 Static assets for the EU harmonised legal-guarantee notice and the GARAN
 durability label, per Commission Implementing Regulation (EU) 2025/1960.
 
@@ -41,7 +44,7 @@ generated exception is `notice/en.png` (see below).
 `notice/` — 24 official colour SVGs (`{lang}.svg`) and 24 colour PNGs
 (`{lang}.png`, 1654×2339 px), one language per ISO 639-1 code (lowercase):
 bg cs da de el en es et fi fr ga hr hu it lt lv mt nl pl pt ro sk sl sv.
-`notice/CHECKSUMS` holds `sha256sum` lines for all 48 files, sorted by
+`docs/notice.CHECKSUMS` in the module holds `sha256sum` lines for all 48 files, sorted by
 filename.
 
 - 23 of the 24 SVGs and PNGs (all except `en`) are byte-identical copies of
@@ -57,7 +60,7 @@ filename.
 
 The official `PNG and JPG.zip` package **does not contain an English colour
 PNG or JPG** (every other of the 24 languages has one). `notice/en.png` was
-therefore rasterised from the official `notice/en.svg` in this repo.
+therefore rasterised from the official `notice/en.svg`.
 
 **Method selection.** No `rsvg-convert` or Inkscape CLI is available on the
 build host. Available options were ImageMagick 7.1.2 (`convert`, whose `SVG`

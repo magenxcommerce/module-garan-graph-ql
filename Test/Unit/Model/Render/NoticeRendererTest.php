@@ -4,52 +4,57 @@ declare(strict_types=1);
 
 namespace Magenx\GaranGraphQl\Test\Unit\Model\Render;
 
+use Magenx\GaranGraphQl\Model\Asset\MediaAssets;
 use Magenx\GaranGraphQl\Model\Config;
 use Magenx\GaranGraphQl\Model\Language\LanguageRegistry;
 use Magenx\GaranGraphQl\Model\Render\NoticeRenderer;
-use Magento\Framework\View\Asset\Repository as AssetRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class NoticeRendererTest extends TestCase
 {
     private Config&MockObject $config;
-    private AssetRepository&MockObject $assetRepository;
+    private MediaAssets&MockObject $mediaAssets;
     private NoticeRenderer $renderer;
 
     protected function setUp(): void
     {
         $this->config = $this->createMock(Config::class);
-        $this->assetRepository = $this->createMock(AssetRepository::class);
-        $this->renderer = new NoticeRenderer($this->config, new LanguageRegistry(), $this->assetRepository);
+        $this->mediaAssets = $this->createMock(MediaAssets::class);
+        $this->renderer = new NoticeRenderer($this->config, new LanguageRegistry(), $this->mediaAssets);
     }
 
-    public function testSvgUrlUsesFrontendNoticeAssetOfStoreLanguage(): void
+    public function testSvgUrlUsesMediaNoticeOfStoreLanguage(): void
     {
         $this->config->expects($this->once())->method('getLanguageCode')->with(3)->willReturn('de');
-        $this->assetRepository->expects($this->once())
-            ->method('getUrlWithParams')
-            ->with('Magenx_GaranGraphQl::notice/de.svg', ['area' => 'frontend', '_secure' => true])
-            ->willReturn('https://shop.test/static/frontend/Magenx_GaranGraphQl/notice/de.svg');
+        $this->mediaAssets->expects($this->once())
+            ->method('getUrl')
+            ->with('notice/de.svg', 3)
+            ->willReturn('https://shop.test/media/garan/notice/de.svg');
 
-        $this->assertSame(
-            'https://shop.test/static/frontend/Magenx_GaranGraphQl/notice/de.svg',
-            $this->renderer->getSvgUrl(3)
-        );
+        $this->assertSame('https://shop.test/media/garan/notice/de.svg', $this->renderer->getSvgUrl(3));
     }
 
-    public function testPngUrlUsesFrontendAreaAndSecureUrlForEmails(): void
+    public function testPngUrlUsesMediaNoticeOfStoreForEmails(): void
     {
         $this->config->method('getLanguageCode')->with(7)->willReturn('en');
-        $this->assetRepository->expects($this->once())
-            ->method('getUrlWithParams')
-            ->with('Magenx_GaranGraphQl::notice/en.png', ['area' => 'frontend', '_secure' => true])
-            ->willReturn('https://shop.test/static/frontend/Magenx_GaranGraphQl/notice/en.png');
+        $this->mediaAssets->expects($this->once())
+            ->method('getUrl')
+            ->with('notice/en.png', 7)
+            ->willReturn('https://shop.test/media/garan/notice/en.png');
 
-        $this->assertSame(
-            'https://shop.test/static/frontend/Magenx_GaranGraphQl/notice/en.png',
-            $this->renderer->getPngUrl(7)
-        );
+        $this->assertSame('https://shop.test/media/garan/notice/en.png', $this->renderer->getPngUrl(7));
+    }
+
+    public function testPngSourceFileIsInMedia(): void
+    {
+        $this->config->method('getLanguageCode')->with(7)->willReturn('fr');
+        $this->mediaAssets->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('notice/fr.png')
+            ->willReturn('/var/www/pub/media/garan/notice/fr.png');
+
+        $this->assertSame('/var/www/pub/media/garan/notice/fr.png', $this->renderer->getPngSourceFile(7));
     }
 
     public function testLinkMatchesQrTargetOfLanguage(): void

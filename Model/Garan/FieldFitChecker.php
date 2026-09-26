@@ -7,8 +7,7 @@ namespace Magenx\GaranGraphQl\Model\Garan;
 // phpcs:disable Magento2.Functions.DiscouragedFunction -- imagettfbbox() is the font metric source; the framework has no wrapper for it.
 
 use InvalidArgumentException;
-use Magento\Framework\Module\Dir;
-use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
+use Magenx\GaranGraphQl\Model\Asset\MediaAssets;
 use RuntimeException;
 
 /**
@@ -89,9 +88,6 @@ class FieldFitChecker
         ],
     ];
 
-    private const FONT_DIRECTORY = '/base/web/fonts/ttf/';
-    private const MODULE_NAME = 'Magenx_GaranGraphQl';
-
     /**
      * GD renders TrueType sizes in points at 96 dpi; measuring at a large size avoids hinting and rounding errors.
      */
@@ -123,7 +119,7 @@ class FieldFitChecker
     private ?string $fontDirectory = null;
 
     public function __construct(
-        private readonly ModuleDirReader $moduleDirReader
+        private readonly MediaAssets $mediaAssets
     ) {
     }
 
@@ -238,8 +234,7 @@ class FieldFitChecker
     public function getFontPath(string $font): string
     {
         if ($this->fontDirectory === null) {
-            $this->fontDirectory = $this->moduleDirReader->getModuleDir(Dir::MODULE_VIEW_DIR, self::MODULE_NAME)
-                . self::FONT_DIRECTORY;
+            $this->fontDirectory = $this->mediaAssets->getAbsolutePath(MediaAssets::FONT_DIRECTORY) . '/';
         }
 
         return $this->fontDirectory . $font;
