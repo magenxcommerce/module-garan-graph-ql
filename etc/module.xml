@@ -18,6 +18,7 @@
             <module name="Magento_QuoteGraphQl"/>
             <module name="Magento_Sales"/>
             <module name="Magento_SalesGraphQl"/>
+            <module name="Magento_StoreGraphQl"/>
             <module name="Magento_Email"/>
         </sequence>
     </module>

@@ -18,7 +18,7 @@ namespace {
     $candidates = array_filter([
         getenv('GARAN_AUTOLOAD') ?: null,
         __DIR__ . '/../vendor/autoload.php',              // standalone checkout after `composer install`
-        __DIR__ . '/../../../../vendor/autoload.php',     // installed as vendor/magenx/module-garan-graph-ql
+        __DIR__ . '/../../../../vendor/autoload.php',     // installed as vendor/magenxcommerce/module-garan-graph-ql
     ]);
 
     $autoloader = null;

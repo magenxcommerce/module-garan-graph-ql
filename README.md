@@ -86,7 +86,7 @@ because mass updates and imports skip the backend models.
 ## Install
 
 ```bash
-composer require magenx/module-garan-graph-ql
+composer require magenxcommerce/module-garan-graph-ql
 bin/magento module:enable Magenx_GaranGraphQl
 bin/magento setup:upgrade && bin/magento setup:di:compile && bin/magento cache:flush
 ```
