@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Magenx\GaranGraphQl\Model\Email;
 
+// phpcs:disable Magento2.Functions.DiscouragedFunction -- basename()/pathinfo() only split names of a path the media directory already resolved.
+
 use Magenx\GaranGraphQl\Model\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Magenx\GaranGraphQl\Model\Render;
 
+// phpcs:disable Magento2.Functions.DiscouragedFunction -- GD/FreeType drawing is what this class does; the framework has no wrapper for it.
+
 use Magenx\GaranGraphQl\Api\Data\GaranLabelDataInterface;
 use Magenx\GaranGraphQl\Model\Garan\FieldFitChecker;
 use GdImage;

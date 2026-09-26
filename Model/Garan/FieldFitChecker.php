@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Magenx\GaranGraphQl\Model\Garan;
 
+// phpcs:disable Magento2.Functions.DiscouragedFunction -- imagettfbbox() is the font metric source; the framework has no wrapper for it.
+
 use InvalidArgumentException;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader as ModuleDirReader;

@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile -- PHPUnit bootstrap: stubs Magento's generated classes in several namespaces and exits without an autoloader.
 
 declare(strict_types=1);
 

@@ -94,8 +94,10 @@ class LabelValidator
             return false;
         }
 
+        // phpcs:disable Magento2.Functions.DiscouragedFunction -- validation only, the URL is never fetched.
         $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
         $host = (string) parse_url($url, PHP_URL_HOST);
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
 
         return in_array($scheme, self::ALLOWED_URL_SCHEMES, true) && $host !== '';
     }
