@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Magenx\GaranGraphQl\Model\Render;
 
+use Magenx\GaranGraphQl\Model\Asset\MediaAssets;
 use Magenx\GaranGraphQl\Model\Config;
 use Magenx\GaranGraphQl\Model\Language\LanguageRegistry;
-use Magento\Framework\App\Area;
-use Magento\Framework\View\Asset\Repository as AssetRepository;
 
 /**
  * URLs and texts of the harmonised notice on the legal guarantee for one store view.
@@ -17,44 +16,32 @@ class NoticeRenderer
     public function __construct(
         private readonly Config $config,
         private readonly LanguageRegistry $languageRegistry,
-        private readonly AssetRepository $assetRepository
+        private readonly MediaAssets $mediaAssets
     ) {
     }
 
     /**
-     * Official SVG of the store language for web pages. The frontend area is named explicitly because GraphQL
-     * requests run in the graphql area, which has no theme of its own.
+     * Official SVG of the store language for web pages, served from the media URL.
      */
     public function getSvgUrl(?int $storeId = null): string
     {
-        return $this->assetRepository->getUrlWithParams(
-            $this->languageRegistry->getNoticeAssetId($this->config->getLanguageCode($storeId), 'svg'),
-            ['area' => Area::AREA_FRONTEND, '_secure' => true]
-        );
+        return $this->mediaAssets->getUrl($this->getNoticeFile('svg', $storeId), $storeId);
     }
 
     /**
-     * Official PNG of the store language for emails: frontend area and secure URL, also inside store emulation.
+     * Official PNG of the store language for emails: secure media URL of the store, also inside store emulation.
      */
     public function getPngUrl(?int $storeId = null): string
     {
-        return $this->assetRepository->getUrlWithParams(
-            $this->languageRegistry->getNoticeAssetId($this->config->getLanguageCode($storeId), 'png'),
-            ['area' => Area::AREA_FRONTEND, '_secure' => true]
-        );
+        return $this->mediaAssets->getUrl($this->getNoticeFile('png', $storeId), $storeId);
     }
 
     /**
-     * Absolute path of the official PNG in the module directory, for attaching it to an email.
+     * Absolute path of the official PNG in pub/media, for attaching it to an email.
      */
     public function getPngSourceFile(?int $storeId = null): string
     {
-        return $this->assetRepository
-            ->createAsset(
-                $this->languageRegistry->getNoticeAssetId($this->config->getLanguageCode($storeId), 'png'),
-                ['area' => Area::AREA_FRONTEND]
-            )
-            ->getSourceFile();
+        return $this->mediaAssets->getAbsolutePath($this->getNoticeFile('png', $storeId));
     }
 
     /**
@@ -80,5 +67,10 @@ class NoticeRenderer
             'EU legal guarantee notice: minimum two-year legal guarantee protection for goods sold in the European Union. More information: %1',
             $this->getLinkLabel($storeId)
         );
+    }
+
+    private function getNoticeFile(string $extension, ?int $storeId): string
+    {
+        return $this->languageRegistry->getNoticeFile($this->config->getLanguageCode($storeId), $extension);
     }
 }

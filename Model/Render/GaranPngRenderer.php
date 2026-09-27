@@ -7,14 +7,13 @@ namespace Magenx\GaranGraphQl\Model\Render;
 // phpcs:disable Magento2.Functions.DiscouragedFunction -- GD/FreeType drawing is what this class does; the framework has no wrapper for it.
 
 use Magenx\GaranGraphQl\Api\Data\GaranLabelDataInterface;
+use Magenx\GaranGraphQl\Model\Asset\MediaAssets;
 use Magenx\GaranGraphQl\Model\Garan\FieldFitChecker;
 use GdImage;
 use InvalidArgumentException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Module\Dir;
-use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -43,8 +42,6 @@ class GaranPngRenderer
         self::VARIANT_FULL => 'label-blank@4x.png',
         self::VARIANT_NESTED => 'nested-blank@4x.png',
     ];
-    private const BLANK_DIRECTORY = '/base/web/garan/';
-    private const MODULE_NAME = 'Magenx_GaranGraphQl';
 
     /** Blank pixels per SVG unit */
     private const BLANK_SCALE = 4.0;
@@ -56,7 +53,7 @@ class GaranPngRenderer
 
     public function __construct(
         private readonly FieldFitChecker $fieldFitChecker,
-        private readonly ModuleDirReader $moduleDirReader,
+        private readonly MediaAssets $mediaAssets,
         private readonly Filesystem $filesystem,
         private readonly StoreManagerInterface $storeManager,
         private readonly LoggerInterface $logger
@@ -153,8 +150,7 @@ class GaranPngRenderer
         WriteInterface $mediaDirectory,
         string $relativePath
     ): void {
-        $blankPath = $this->moduleDirReader->getModuleDir(Dir::MODULE_VIEW_DIR, self::MODULE_NAME)
-            . self::BLANK_DIRECTORY . self::BLANKS[$variant];
+        $blankPath = $this->mediaAssets->getAbsolutePath(MediaAssets::GARAN_DIRECTORY . '/' . self::BLANKS[$variant]);
         $image = imagecreatefrompng($blankPath);
         if ($image === false) {
             throw new RuntimeException(sprintf('Cannot read GARAN blank "%s".', $blankPath));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Magenx\GaranGraphQl\Test\Unit\Model\Render;
 
+use Magenx\GaranGraphQl\Model\Asset\MediaAssets;
 use Magenx\GaranGraphQl\Model\Garan\FieldFitChecker;
 use Magenx\GaranGraphQl\Model\Garan\GaranLabelData;
 use Magenx\GaranGraphQl\Model\Render\GaranPngRenderer;
@@ -11,7 +12,6 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Renders with real GD and the module fonts into a temporary media directory.
+ * Renders with real GD and the fixture fonts and blanks into a temporary media directory.
  */
 class GaranPngRendererTest extends TestCase
 {
@@ -201,14 +201,16 @@ class GaranPngRendererTest extends TestCase
 
     private function createRenderer(WriteInterface $mediaDirectory): GaranPngRenderer
     {
-        $moduleDirReader = $this->createMock(ModuleDirReader::class);
-        $moduleDirReader->method('getModuleDir')->willReturn(dirname(__DIR__, 4) . '/view');
+        $mediaAssets = $this->createMock(MediaAssets::class);
+        $mediaAssets->method('getAbsolutePath')->willReturnCallback(
+            static fn (string $path): string => dirname(__DIR__, 3) . '/_files/media/garan/' . $path
+        );
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->method('getDirectoryWrite')->with('media')->willReturn($mediaDirectory);
 
         return new GaranPngRenderer(
-            new FieldFitChecker($moduleDirReader),
-            $moduleDirReader,
+            new FieldFitChecker($mediaAssets),
+            $mediaAssets,
             $filesystem,
             $this->storeManager,
             $this->logger

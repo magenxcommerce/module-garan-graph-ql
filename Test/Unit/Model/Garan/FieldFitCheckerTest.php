@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Magenx\GaranGraphQl\Test\Unit\Model\Garan;
 
+use Magenx\GaranGraphQl\Model\Asset\MediaAssets;
 use Magenx\GaranGraphQl\Model\Garan\FieldFitChecker;
 use InvalidArgumentException;
-use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Uses the real Inter TTFs of the module, so the boundaries below are the measured limits of the official layout.
+ * Uses the real Inter TTFs from the test media fixture, so the boundaries below are the measured limits of the official layout.
  */
 class FieldFitCheckerTest extends TestCase
 {
@@ -18,11 +18,11 @@ class FieldFitCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $moduleDirReader = $this->createMock(ModuleDirReader::class);
-        $moduleDirReader->method('getModuleDir')
-            ->with('view', 'Magenx_GaranGraphQl')
-            ->willReturn(dirname(__DIR__, 4) . '/view');
-        $this->checker = new FieldFitChecker($moduleDirReader);
+        $mediaAssets = $this->createMock(MediaAssets::class);
+        $mediaAssets->method('getAbsolutePath')
+            ->with('fonts/ttf')
+            ->willReturn(dirname(__DIR__, 3) . '/_files/media/garan/fonts/ttf');
+        $this->checker = new FieldFitChecker($mediaAssets);
     }
 
     public function testGuidelineExampleValuesFit(): void

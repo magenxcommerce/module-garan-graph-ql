@@ -57,17 +57,17 @@ class LanguageRegistryTest extends TestCase
         ];
     }
 
-    public function testNoticeAssetIdUsesLanguageAndExtension(): void
+    public function testNoticeFileUsesLanguageAndExtension(): void
     {
-        self::assertSame('Magenx_GaranGraphQl::notice/de.svg', $this->registry->getNoticeAssetId('de', 'svg'));
-        self::assertSame('Magenx_GaranGraphQl::notice/en.png', $this->registry->getNoticeAssetId('en', 'png'));
+        self::assertSame('notice/de.svg', $this->registry->getNoticeFile('de', 'svg'));
+        self::assertSame('notice/en.png', $this->registry->getNoticeFile('en', 'png'));
     }
 
-    public function testNoticeAssetIdRejectsOtherExtensions(): void
+    public function testNoticeFileRejectsOtherExtensions(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->registry->getNoticeAssetId('de', 'jpg');
+        $this->registry->getNoticeFile('de', 'jpg');
     }
 
     /**

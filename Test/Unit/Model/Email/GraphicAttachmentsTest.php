@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
 class GraphicAttachmentsTest extends TestCase
 {
     private const STORE_ID = 2;
-    private const NOTICE_FILE = '/module/view/base/web/notice/de.png';
+    private const NOTICE_FILE = '/var/www/pub/media/garan/notice/de.png';
 
     private Config&MockObject $config;
     private NoticeRenderer&MockObject $noticeRenderer;
