@@ -16,15 +16,18 @@ use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ConfigurableResource;
 use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-class Resolver implements GaranLabelResolverInterface
+class Resolver implements GaranLabelResolverInterface, ResetAfterRequestInterface
 {
     /**
+     * Child id => configurable parent id (0 for none). Request scoped: emptied by the request-state reset.
+     *
      * @var array<int, int>
      */
     private array $parentIds = [];
@@ -40,6 +43,14 @@ class Resolver implements GaranLabelResolverInterface
         private readonly LoggerInterface $logger,
         private readonly ?PrefetchedValues $prefetchedValues = null
     ) {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->parentIds = [];
     }
 
     public function forProduct(ProductInterface $product, ?int $storeId = null): ?GaranLabelDataInterface

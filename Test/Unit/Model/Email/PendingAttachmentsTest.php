@@ -51,4 +51,17 @@ class PendingAttachmentsTest extends TestCase
         $this->assertFalse($this->registry->hasPending());
         $this->assertSame([], $this->registry->takeAll());
     }
+
+    /**
+     * A send that failed before the transport was built leaves its documents queued; on a long-lived application
+     * server they must not reach the next email the same process builds.
+     */
+    public function testRequestStateResetDropsDocumentsLeftByAFailedSend(): void
+    {
+        $this->registry->add(new EmailAttachment('a.pdf', 'A', 'application/pdf'));
+        $this->registry->_resetState();
+
+        $this->assertFalse($this->registry->hasPending());
+        $this->assertSame([], $this->registry->takeAll());
+    }
 }
