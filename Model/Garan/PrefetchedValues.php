@@ -6,14 +6,19 @@ declare(strict_types=1);
 
 namespace Magenx\GaranGraphQl\Model\Garan;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Request scoped store of raw attribute values and configurable parents loaded in bulk by {@see BatchLoader}.
  *
  * {@see Resolver} asks here before issuing its own per-product queries, so a GraphQL branch with many products costs
  * one query per EAV table instead of several per product. A value that was looked up and is absent is stored as null
  * and still counts as known.
+ *
+ * Emptied by the request-state reset, so a long-lived application server neither serves values that changed since
+ * nor keeps every product it has ever seen.
  */
-class PrefetchedValues
+class PrefetchedValues implements ResetAfterRequestInterface
 {
     /**
      * @var array<int, int> child id => parent id, 0 for "no configurable parent"
@@ -67,5 +72,14 @@ class PrefetchedValues
         }
 
         return $values;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->parents = [];
+        $this->values = [];
     }
 }
