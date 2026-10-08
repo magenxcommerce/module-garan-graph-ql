@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/magenxcommerce/module-garan-graph-ql/compare/v1.0.1...v1.0.2) (2026-10-08)
+
+
+### Bug Fixes
+
+* reset request-scoped state for long-lived application servers ([#5](https://github.com/magenxcommerce/module-garan-graph-ql/issues/5)) ([a111e3a](https://github.com/magenxcommerce/module-garan-graph-ql/commit/a111e3a9d551461fd91fb62a365939d9d85829cb))
+
 ## [1.0.1](https://github.com/magenxcommerce/module-garan-graph-ql/compare/v1.0.0...v1.0.1) (2026-09-27)
 
 
