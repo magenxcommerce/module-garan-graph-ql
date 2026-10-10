@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/magenxcommerce/module-garan-graph-ql/compare/v1.0.2...v1.0.3) (2026-10-10)
+
+
+### Bug Fixes
+
+* reset the GARAN attribute backends after each request ([#7](https://github.com/magenxcommerce/module-garan-graph-ql/issues/7)) ([43c0b65](https://github.com/magenxcommerce/module-garan-graph-ql/commit/43c0b657c1059ae863fc2923e6a8c21b52aca274))
+
 ## [1.0.2](https://github.com/magenxcommerce/module-garan-graph-ql/compare/v1.0.1...v1.0.2) (2026-10-08)
 
 
