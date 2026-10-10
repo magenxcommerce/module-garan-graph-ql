@@ -9,12 +9,15 @@ use Magenx\GaranGraphQl\Model\Garan\LabelValidator;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * GARAN brand and model identifier: trimmed, and rejected when the text does not fit the label (alone or combined).
  */
-class LabelText extends AbstractBackend
+class LabelText extends AbstractBackend implements ResetAfterRequestInterface
 {
+    use ResetsBackendState;
+
     public function __construct(
         private readonly LabelValidator $labelValidator
     ) {

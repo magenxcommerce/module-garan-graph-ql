@@ -8,12 +8,15 @@ use Magenx\GaranGraphQl\Model\Garan\LabelValidator;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * GARAN guarantee terms URL: empty or an absolute http(s) URL.
  */
-class TermsUrl extends AbstractBackend
+class TermsUrl extends AbstractBackend implements ResetAfterRequestInterface
 {
+    use ResetsBackendState;
+
     public function __construct(
         private readonly LabelValidator $labelValidator
     ) {

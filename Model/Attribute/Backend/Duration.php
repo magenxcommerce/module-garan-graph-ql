@@ -8,12 +8,15 @@ use Magenx\GaranGraphQl\Model\Garan\DurationParser;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * GARAN duration: accepts locale input ("4,5") and stores the parsed float; empty means "no label".
  */
-class Duration extends AbstractBackend
+class Duration extends AbstractBackend implements ResetAfterRequestInterface
 {
+    use ResetsBackendState;
+
     public function __construct(
         private readonly DurationParser $durationParser
     ) {
