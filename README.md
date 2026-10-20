@@ -1,5 +1,9 @@
 # Magenx_GaranGraphQl
 
+> **Built with AI assistance.** This module is built with significant use of Claude Code, under active human review and guidance. It is open source and in active development. AI assistance does not lower the engineering bar: every change must meet the same correctness, security, documentation and maintainability requirements as any other contribution.
+>
+> **No warranty.** We are not responsible for any incompatibility. By installing this software, you accept responsibility for its security, upgrades, patches and monitoring.
+
 EU **harmonised legal-guarantee notice** and **EU GARAN durability label** for headless Magento storefronts,
 served over GraphQL. Both become mandatory on **27 September 2026** under Directive (EU) 2024/825 and
 Implementing Regulation (EU) 2025/1960:
