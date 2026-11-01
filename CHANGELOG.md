@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/magenxcommerce/module-garan-graph-ql/compare/v1.0.3...v1.0.4) (2026-11-01)
+
+
+### Bug Fixes
+
+* require PHP 8.4 or newer ([#9](https://github.com/magenxcommerce/module-garan-graph-ql/issues/9)) ([240bca1](https://github.com/magenxcommerce/module-garan-graph-ql/commit/240bca16761062ba101daad5c8bd4994997ee960))
+
 ## [1.0.3](https://github.com/magenxcommerce/module-garan-graph-ql/compare/v1.0.2...v1.0.3) (2026-10-10)
 
 
