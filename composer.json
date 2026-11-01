@@ -7,7 +7,7 @@
     ],
     "require": {
         "ext-gd": "*",
-        "php": "~8.3.0||~8.4.0||~8.5.0",
+        "php": "~8.4.0||~8.5.0",
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-graph-ql": "*",
