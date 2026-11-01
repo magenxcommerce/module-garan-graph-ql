@@ -23,7 +23,7 @@ decides where the notice and labels go; this module only serves the data.
 
 ## Requirements
 
-- Magento 2.4.8, PHP 8.3+
+- Magento 2.4.8, PHP 8.4+
 - **ext-gd with FreeType.** Needed to check that brand and model fit the label and to render the label PNGs.
   Without it no label is served.
 
